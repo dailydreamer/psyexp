@@ -1,6 +1,20 @@
-<h1>Editing {{.Title}}</h1>
+{{ template "header.html" . }}
 
-<form action="/save" method="POST">
-<div><textarea name="body" rows="20" cols="80">test</textarea></div>
-<div><input type="submit" value="Save"></div>
-</form>
+<body>
+  <div class="content has-text-centered" style="padding:5vh 5vw">
+    <img class="image" style="width:480px;height:480px;margin-bottom:10px" src="/static/images/{{.}}.jpg" />
+
+    <div class="field is-grouped">
+      <p class="control">
+        <a class="button is-primary">选择</a>
+      </p>
+      <p class="control">
+        <a class="button">保留</a>
+      </p>
+      <p class="control">
+        <a class="button is-danger">删除</a>
+      </p>
+    </div>
+  </div>
+</body>
+

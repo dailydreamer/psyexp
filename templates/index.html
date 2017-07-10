@@ -1,8 +1,16 @@
 {{ template "header.html" . }}
 
-<h1>Editing {{.Title}}</h1>
-
-<form action="/save" method="POST">
-<div><textarea name="body" rows="20" cols="80">test</textarea></div>
-<div><input type="submit" value="Save"></div>
-</form>
+<body>
+  <div style="padding-top:30vh">
+    <form class="field has-addons has-addons-centered" action="/intro" method="POST">
+      <p class="control">
+        <input class="input" type="text" placeholder="请输入你的被试编号" name="id">
+      </p>
+      <p class="control">
+        <button class="button is-primary" type="submit">
+          确认
+        </button>
+      </p>
+    </form>
+  </div>
+</body>
