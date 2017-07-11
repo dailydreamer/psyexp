@@ -9,8 +9,6 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/gorilla/sessions"
-  "github.com/labstack/echo-contrib/session"
 
 	"psyexp/config"
 	"psyexp/model"
@@ -24,7 +22,6 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
     return t.templates.ExecuteTemplate(w, name, data)
 }
 
-
 func main() {
 	config.InitConfig()
 
@@ -32,7 +29,6 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 	// static files
 	e.Static("/static", "static")
 
@@ -42,14 +38,14 @@ func main() {
 	e.Renderer = t
 
 	// TODO put tester to sesseion
-	tester := model.New()
-	log.Println(tester)
+	var tester *model.Tester
 
 	e.GET("/", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "index.html", nil)
 	})
 
 	e.POST("/intro", func(c echo.Context) error {
+		tester = model.New()
 		id := c.FormValue("id")
 		tester.ID = id
 		return c.Render(http.StatusOK, "intro.html", nil)
