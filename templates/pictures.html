@@ -1,18 +1,18 @@
 {{ template "header.html" . }}
 
 <body>
-  <div class="content has-text-centered" style="padding:5vh 5vw">
+  <div class="content" style="padding:5vh 5vw">
+    <h2>图片{{.}}</h2>
     <img class="image" style="width:480px;height:480px;margin-bottom:10px" src="/static/images/{{.}}.jpg" />
-
     <div class="field is-grouped">
       <p class="control">
-        <a class="button is-primary">选择</a>
+        <a href="/finish/{{.}}" class="button is-primary">选择</a>
       </p>
       <p class="control">
-        <a class="button">保留</a>
+        <a href="/keep" class="button">保留</a>
       </p>
       <p class="control">
-        <a class="button is-danger">删除</a>
+        <a href="/giveup" class="button is-danger">放弃</a>
       </p>
     </div>
   </div>

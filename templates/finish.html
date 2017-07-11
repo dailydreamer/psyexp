@@ -1,6 +1,18 @@
-<h1>Editing {{.Title}}</h1>
+{{ template "header.html" . }}
 
-<form action="/save" method="POST">
-<div><textarea name="body" rows="20" cols="80">test</textarea></div>
-<div><input type="submit" value="Save"></div>
-</form>
+<body>
+  <div class="content" style="padding:5vh 5vw">
+    <h1>任务结束</h1>
+    <p>
+      你最终选择的图片是
+    </p>
+    <img class="image" style="width:480px;height:480px;margin-bottom:10px" src="/static/images/{{.}}.jpg" />
+
+    <div class="field is-grouped">
+      <p class="control">
+        <a href="/" class="button is-primary">重新开始</a>
+      </p>
+    </div>
+  </div>
+</body>
+

@@ -9,9 +9,11 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/gorilla/sessions"
+  "github.com/labstack/echo-contrib/session"
 
-		"psyexp/config"
-		"psyexp/model"
+	"psyexp/config"
+	"psyexp/model"
 )
 
 type Template struct {
@@ -30,6 +32,7 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 	// static files
 	e.Static("/static", "static")
 
@@ -38,7 +41,8 @@ func main() {
 	}
 	e.Renderer = t
 
-	tester := model.Tester{}
+	// TODO put tester to sesseion
+	tester := model.New()
 	log.Println(tester)
 
 	e.GET("/", func(c echo.Context) error {
@@ -51,17 +55,27 @@ func main() {
 		return c.Render(http.StatusOK, "intro.html", nil)
 	})
 
-	e.GET("/pictures/:pid", func(c echo.Context) error {
-		pid := c.Param("pid")
-		if (pid == "") {
-			pid = "0"
-		}
+	e.GET("/start", func(c echo.Context) error {
+		pid := tester.Start()
 		return c.Render(http.StatusOK, "pictures.html", pid)
 	})
 
-	e.POST("/finish", func(c echo.Context) error {
-		tester.PicturePicked = c.FormValue("pid")
-		return c.Render(http.StatusOK, "finish.html", nil)
+	e.GET("/finish/:pid", func(c echo.Context) error {
+		pid := tester.Finish(c.Param("pid"))
+		return c.Render(http.StatusOK, "finish.html", pid)
+	})
+
+	e.GET("/keep", func(c echo.Context) error {
+		pid := tester.Keep()
+		return c.Render(http.StatusOK, "pictures.html", pid)
+	})
+
+	e.GET("/giveup", func(c echo.Context) error {
+		pid, isOver := tester.Giveup()
+		if isOver {
+			return c.Render(http.StatusOK, "finish.html", pid)
+		} 
+		return c.Render(http.StatusOK, "pictures.html", pid)
 	})
 
 	// try to get heroku port first
