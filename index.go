@@ -56,8 +56,8 @@ func main() {
 		return c.Render(http.StatusOK, "pictures.html", pid)
 	})
 
-	e.GET("/finish/:pid", func(c echo.Context) error {
-		pid := tester.Finish(c.Param("pid"))
+	e.GET("/finish", func(c echo.Context) error {
+		pid := tester.Finish()
 		return c.Render(http.StatusOK, "finish.html", pid)
 	})
 
@@ -72,6 +72,7 @@ func main() {
 	e.GET("/giveup", func(c echo.Context) error {
 		pid, isAllOver, isRoundOver := tester.Giveup()
 		if isAllOver {
+			pid = tester.Finish()
 			return c.Render(http.StatusOK, "finish.html", pid)
 		}
 		if isRoundOver {

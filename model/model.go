@@ -47,11 +47,11 @@ func (t *Tester) Start() interface{} {
 	return t.CurrentPicture.Value
 }
 
-func (t *Tester) Finish(pid string) interface{} {
-	t.PicturePicked = pid
+func (t *Tester) Finish() interface{} {
+	t.PicturePicked = t.CurrentPicture.Value.(string)
 	t.DecisionTime = time.Since(t.StartTime)
 	t.saveToCsv()
-	return pid
+	return t.PicturePicked
 }
 
 func (t *Tester) saveToCsv() {
@@ -60,6 +60,8 @@ func (t *Tester) saveToCsv() {
 		t.PicturePicked, 
 		fmt.Sprintf("%f", t.DecisionTime.Seconds()),
 	}
+	log.Println("exp data:")
+	log.Println(data)
 	fileName := "psyexp.csv"
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
