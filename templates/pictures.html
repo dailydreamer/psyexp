@@ -1,7 +1,7 @@
 {{ template "header.html" . }}
 
 <body>
-  <div class="content" style="padding:5vh 5vw">
+  <div class="content" style="padding:5vh 5vw;display:flex;flex-direction:column;align-items:center">
     <img class="image" style="width:640px;height:480px;margin-bottom:10px" src="/static/images/{{.}}.jpg" />
     <div class="field is-grouped">
       <p class="control">
@@ -28,7 +28,7 @@
         </p>
       </section>
       <footer class="modal-card-foot">
-        <a href="/finish/{{.}}" class="button is-success">确定选择</a>
+        <a href="/finish/{{.}}" class="button is-primary">确定选择</a>
         <button class="button" onclick="closeModal()">重新选择</button>
       </footer>
     </div>
