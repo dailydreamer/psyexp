@@ -2,11 +2,10 @@
 
 <body>
   <div class="content" style="padding:5vh 5vw">
-    <h3>图片{{.}}</h3>
     <img class="image" style="width:640px;height:480px;margin-bottom:10px" src="/static/images/{{.}}.jpg" />
     <div class="field is-grouped">
       <p class="control">
-        <a href="/finish/{{.}}" class="button is-primary">确定选择</a>
+        <button onclick="openModal()" class="button is-primary">确定选择</button>
       </p>
       <p class="control">
         <a href="/keep" class="button">保留</a>
@@ -16,5 +15,32 @@
       </p>
     </div>
   </div>
+  <div class="modal" id="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">确定选择</p>
+        <button class="delete" onclick="closeModal()"></button>
+      </header>
+      <section class="modal-card-body">
+        <p>
+          你已经点击了“确定选择”，确定选定图片并结束实验吗？ 
+        </p>
+      </section>
+      <footer class="modal-card-foot">
+        <a href="/finish/{{.}}" class="button is-success">确定选择</a>
+        <button class="button" onclick="closeModal()">重新选择</button>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    function closeModal() {
+      document.getElementById("modal").classList.remove("is-active")      
+    }
+    function openModal() {
+      document.getElementById("modal").classList.add("is-active")
+    }
+  </script>
 </body>
 
