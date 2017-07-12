@@ -7,6 +7,8 @@ import (
 	"os"
 	"log"
 	"encoding/csv"
+	"math/rand"
+	"github.com/Ramshackle-Jamathon/go-quickPerm"
 )
 
 type Tester struct {
@@ -19,12 +21,23 @@ type Tester struct {
 }
 
 func New() *Tester {
-	// TODO add random
 	t := &Tester{}
 	t.PicturesList = list.New()
-	for i := 0; i < 10; i++ {
-		t.PicturesList.PushBack(fmt.Sprintf("%d",i))
+
+	idx := rand.Intn(3628800) // fac 10
+	for permutation := range quickPerm.GeneratePermutationsString([]string{"1","2","3","4","5","6","7","8","9","10"}) {
+		if (idx == 0) {
+			for _, item := range permutation {
+				t.PicturesList.PushBack(item)
+			}
+			break
+		}
+		idx = idx - 1
 	}
+
+	// for i := 1; i <= 10; i++ {
+	// 	t.PicturesList.PushBack(fmt.Sprintf("%d",i))
+	// }
 	return t
 }
 
@@ -45,7 +58,7 @@ func (t *Tester) saveToCsv() {
 	data := []string{
 		t.ID, 
 		t.PicturePicked, 
-		fmt.Sprintf("%f", t.DecisionTime.Seconds()),
+		fmt.Sprintf("%d", t.DecisionTime.Nanoseconds()),
 	}
 	fileName := "psyexp.csv"
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
@@ -61,7 +74,7 @@ func (t *Tester) saveToCsv() {
 	}
 }
 
-// Giveup return next pid, isRoundOver
+// Keep return next pid, isRoundOver
 func (t *Tester) Keep() (interface{}, bool) {
 	isRoundOver := false
 	if t.CurrentPicture.Next() == nil {
@@ -93,4 +106,3 @@ func (t *Tester) Giveup() (interface{}, bool, bool) {
 		return t.CurrentPicture.Value, false, isRoundOver
 	}
 }
-

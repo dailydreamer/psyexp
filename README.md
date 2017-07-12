@@ -1,3 +1,3 @@
 # CSV format
 
-ID, picturePicked, DecisionTime (seconds)
+ID, picturePicked, DecisionTime (nanoseconds), Questions...
