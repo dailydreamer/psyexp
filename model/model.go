@@ -58,7 +58,7 @@ func (t *Tester) saveToCsv() {
 	data := []string{
 		t.ID, 
 		t.PicturePicked, 
-		fmt.Sprintf("%d", t.DecisionTime.Nanoseconds()),
+		fmt.Sprintf("%f", t.DecisionTime.Seconds()),
 	}
 	fileName := "psyexp.csv"
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
