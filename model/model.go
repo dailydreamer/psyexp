@@ -37,8 +37,6 @@ func (t *Tester) Start() interface{} {
 func (t *Tester) Finish(pid string) interface{} {
 	t.PicturePicked = pid
 	t.DecisionTime = time.Since(t.StartTime)
-	fmt.Printf("Decistion time: %fs\n", t.DecisionTime.Seconds())
-	// TODO save to csv
 	t.saveToCsv()
 	return pid
 }
@@ -63,18 +61,26 @@ func (t *Tester) saveToCsv() {
 	}
 }
 
-func (t *Tester) Keep() interface{} {
+// Giveup return next pid, isRoundOver
+func (t *Tester) Keep() (interface{}, bool) {
+	isRoundOver := false
 	if t.CurrentPicture.Next() == nil {
+		// round over
+		isRoundOver = true
 		t.CurrentPicture = t.PicturesList.Front()
 	} else {
 		t.CurrentPicture = t.CurrentPicture.Next()
 	}
-	return t.CurrentPicture.Value
+	return t.CurrentPicture.Value, isRoundOver
 }
 
-func (t *Tester) Giveup() (interface{}, bool) {
+// Giveup return next pid, isAllOver, isRoundOver
+func (t *Tester) Giveup() (interface{}, bool, bool) {
 	eleNeedToBeDelete := t.CurrentPicture
+	isRoundOver := false
 	if t.CurrentPicture.Next() == nil {
+		// round over
+		isRoundOver = true
 		t.CurrentPicture = t.PicturesList.Front()
 	} else {
 		t.CurrentPicture = t.CurrentPicture.Next()
@@ -82,9 +88,9 @@ func (t *Tester) Giveup() (interface{}, bool) {
 	t.PicturesList.Remove(eleNeedToBeDelete)
 	if t.CurrentPicture.Next() == nil && t.CurrentPicture.Prev() == nil {
 		// only left one picture, which is the choosen one
-		return t.CurrentPicture.Value, true
+		return t.CurrentPicture.Value, true, isRoundOver
 	} else {
-		return t.CurrentPicture.Value, false
+		return t.CurrentPicture.Value, false, isRoundOver
 	}
 }
 

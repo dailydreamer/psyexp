@@ -62,15 +62,26 @@ func main() {
 	})
 
 	e.GET("/keep", func(c echo.Context) error {
-		pid := tester.Keep()
+		pid, isRoundOver := tester.Keep()
+		if isRoundOver {
+			return c.Render(http.StatusOK, "roundover.html", nil)
+		}
 		return c.Render(http.StatusOK, "pictures.html", pid)
 	})
 
 	e.GET("/giveup", func(c echo.Context) error {
-		pid, isOver := tester.Giveup()
-		if isOver {
+		pid, isAllOver, isRoundOver := tester.Giveup()
+		if isAllOver {
 			return c.Render(http.StatusOK, "finish.html", pid)
-		} 
+		}
+		if isRoundOver {
+			return c.Render(http.StatusOK, "roundover.html", nil)
+		}
+		return c.Render(http.StatusOK, "pictures.html", pid)
+	})
+
+	e.GET("/roundover", func(c echo.Context) error {
+		pid := tester.CurrentPicture.Value
 		return c.Render(http.StatusOK, "pictures.html", pid)
 	})
 
