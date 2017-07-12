@@ -37,7 +37,7 @@ func main() {
 	}
 	e.Renderer = t
 
-	// TODO put tester to sesseion
+	// TODO put tester to session
 	var tester *model.Tester
 
 	e.GET("/", func(c echo.Context) error {

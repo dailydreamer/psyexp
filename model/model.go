@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"time"
 	"container/list"
+	"os"
+	"log"
+	"encoding/csv"
 )
 
 type Tester struct {
@@ -36,7 +39,28 @@ func (t *Tester) Finish(pid string) interface{} {
 	t.DecisionTime = time.Since(t.StartTime)
 	fmt.Printf("Decistion time: %fs\n", t.DecisionTime.Seconds())
 	// TODO save to csv
+	t.saveToCsv()
 	return pid
+}
+
+func (t *Tester) saveToCsv() {
+	data := []string{
+		t.ID, 
+		t.PicturePicked, 
+		fmt.Sprintf("%f", t.DecisionTime.Seconds()),
+	}
+	fileName := "psyexp.csv"
+	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	if err != nil {
+		log.Printf("\nOpen csv file error: %s\n", err.Error())
+	}
+	defer file.Close()
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+	err = writer.Write(data)
+	if err != nil {
+		log.Printf("\nCannot write to csv: %s\n", err.Error())
+	}
 }
 
 func (t *Tester) Keep() interface{} {
