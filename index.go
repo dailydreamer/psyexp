@@ -41,11 +41,11 @@ func main() {
 	var tester *model.Tester
 
 	e.GET("/", func(c echo.Context) error {
-		tester = model.New()
 		return c.Render(http.StatusOK, "index.html", nil)
 	})
 
 	e.POST("/intro", func(c echo.Context) error {
+		tester = model.New()
 		id := c.FormValue("id")
 		tester.ID = id
 		return c.Render(http.StatusOK, "intro.html", nil)

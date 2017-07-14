@@ -60,12 +60,13 @@ func (t *Tester) saveToCsv() {
 		t.PicturePicked, 
 		fmt.Sprintf("%f", t.DecisionTime.Seconds()),
 	}
-	log.Println("exp data:")
-	log.Println(data)
 	fileName := "psyexp.csv"
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		log.Printf("\nOpen csv file error: %s\n", err.Error())
+		for i := 2; err != nil; i++ {
+			file, err = os.OpenFile(fileName+fmt.Sprintf("%d",i), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		}
 	}
 	defer file.Close()
 	writer := csv.NewWriter(file)
@@ -74,6 +75,8 @@ func (t *Tester) saveToCsv() {
 	if err != nil {
 		log.Printf("\nCannot write to csv: %s\n", err.Error())
 	}
+	log.Println("exp data:")
+	log.Println(data)
 }
 
 // Keep return next pid, isRoundOver
