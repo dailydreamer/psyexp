@@ -65,7 +65,7 @@ func (t *Tester) saveToCsv() {
 	if err != nil {
 		log.Printf("\nOpen csv file error: %s\n", err.Error())
 		for i := 2; err != nil; i++ {
-			file, err = os.OpenFile(fileName+fmt.Sprintf("%d",i), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+			file, err = os.OpenFile(fmt.Sprintf("psyexp%d.csv",i), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 		}
 	}
 	defer file.Close()
