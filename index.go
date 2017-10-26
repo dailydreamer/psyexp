@@ -37,6 +37,9 @@ func main() {
 	}
 	e.Renderer = t
 
+	// compute pictures first
+	model.Init()
+
 	// TODO put tester to session
 	var tester *model.Tester
 

@@ -8,6 +8,8 @@ import (
 	"log"
 	"encoding/csv"
 	"math/rand"
+	"io/ioutil"
+	"math/big"
 	"github.com/Ramshackle-Jamathon/go-quickPerm"
 )
 
@@ -20,12 +22,32 @@ type Tester struct {
 	PicturePicked string
 }
 
+type Picture struct {
+	PictureNames []string
+	PictureNumsFac big.Int
+}
+
+var pic Picture
+
+func Init() {
+	files, err := ioutil.ReadDir("static/images/")
+	if err != nil {
+		log.Fatal(err)
+	}
+	num := len(files)
+	pic.PictureNumsFac.MulRange(1, int64(num))
+	for _, file := range files {
+		pic.PictureNames = append(pic.PictureNames, file.Name())
+	}
+	log.Println(pic)
+}
+
 func New() *Tester {
 	t := &Tester{}
 	t.PicturesList = list.New()
 
-	idx := rand.Intn(3628800) // fac 10
-	for permutation := range quickPerm.GeneratePermutationsString([]string{"1","2","3","4","5","6","7","8","9","10"}) {
+	idx := rand.Int63n(pic.PictureNumsFac.Int64())
+	for permutation := range quickPerm.GeneratePermutationsString(pic.PictureNames) {
 		if (idx == 0) {
 			for _, item := range permutation {
 				t.PicturesList.PushBack(item)
